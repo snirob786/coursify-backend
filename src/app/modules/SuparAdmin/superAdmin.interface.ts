@@ -18,7 +18,7 @@ export type TUserName = {
   lastName: string;
 };
 
-export type TAdmin = {
+export type TSuperAdmin = {
   // id: string;
   user: Types.ObjectId;
   designation: string;
@@ -35,6 +35,6 @@ export type TAdmin = {
   isDeleted: boolean;
 };
 
-export interface AdminModel extends Model<TAdmin> {
-  isUserExists(id: string): Promise<TAdmin | null>;
+export interface SuperAdminModel extends Model<TSuperAdmin> {
+  isUserExists(id: string): Promise<TSuperAdmin | null>;
 }

@@ -15,9 +15,8 @@ const router = express.Router();
 router.post(
   '/create-student',
   // auth(USER_ROLE.admin),
-  upload.single('file'),
+  // upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
     req.body = JSON.parse(req.body.data);
     next();
   },
@@ -27,7 +26,6 @@ router.post(
 
 router.post(
   '/create-faculty',
-  auth(USER_ROLE.admin),
   upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -39,15 +37,24 @@ router.post(
 
 router.post(
   '/create-admin',
-  // auth(USER_ROLE.admin),
+  auth(USER_ROLE.superAdmin),
   upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
     req.body = JSON.parse(req.body.data);
     next();
   },
   validateRequest(createAdminValidationSchema),
   UserControllers.createAdmin,
+);
+router.post(
+  '/create-super-admin',
+  // upload.single('file'),
+  (req: Request, res: Response, next: NextFunction) => {
+    // req.body = JSON.parse(req.body);
+    next();
+  },
+  validateRequest(createAdminValidationSchema),
+  UserControllers.createSuperAdmin,
 );
 
 router.post(

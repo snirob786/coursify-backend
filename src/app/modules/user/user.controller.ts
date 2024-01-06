@@ -54,6 +54,22 @@ const createAdmin = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const createSuperAdmin = catchAsync(async (req, res) => {
+  const { password, admin: adminData } = req.body;
+
+  const result = await UserServices.createSuperAdminIntoDB(
+    req.file,
+    password,
+    adminData,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Admin is created succesfully',
+    data: result,
+  });
+});
 
 const getMe = catchAsync(async (req, res) => {
   // const token = req.headers.authorization;
@@ -90,6 +106,7 @@ export const UserControllers = {
   createStudent,
   createFaculty,
   createAdmin,
+  createSuperAdmin,
   getMe,
   changeStatus,
 };

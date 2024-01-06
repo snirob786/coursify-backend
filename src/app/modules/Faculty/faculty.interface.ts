@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Model, Types } from 'mongoose';
 
 export type TGender = 'male' | 'female' | 'other';
@@ -33,6 +34,7 @@ export type TFaculty = {
   profileImg?: string;
   academicDepartment: Types.ObjectId;
   isDeleted: boolean;
+  status: 'in-progress' | 'blocked' | 'active';
 };
 
 export interface FacultyModel extends Model<TFaculty> {

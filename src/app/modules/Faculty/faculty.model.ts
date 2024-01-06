@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { BloodGroup, Gender } from './faculty.constant';
 import { FacultyModel, TFaculty, TUserName } from './faculty.interface';
+import { UserStatus } from '../user/user.constant';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -85,6 +86,11 @@ const facultySchema = new Schema<TFaculty, FacultyModel>(
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    status: {
+      type: String,
+      enum: UserStatus,
+      default: 'in-progress',
     },
   },
   {

@@ -1,6 +1,10 @@
 import { Schema, model } from 'mongoose';
-import { BloodGroup, Gender } from './admin.constant';
-import { AdminModel, TAdmin, TUserName } from './admin.interface';
+import { BloodGroup, Gender } from './superAdmin.constant';
+import {
+  SuperAdminModel,
+  TSuperAdmin,
+  TUserName,
+} from './superAdmin.interface';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -21,13 +25,13 @@ const userNameSchema = new Schema<TUserName>({
   },
 });
 
-const adminSchema = new Schema<TAdmin, AdminModel>(
+const superAdminSchema = new Schema<TSuperAdmin, SuperAdminModel>(
   {
-    id: {
-      type: String,
-      required: [true, 'ID is required'],
-      unique: true,
-    },
+    // id: {
+    //   type: String,
+    //   required: [true, 'ID is required'],
+    //   unique: true,
+    // },
     user: {
       type: Schema.Types.ObjectId,
       required: [true, 'User id is required'],
@@ -90,36 +94,39 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
 );
 
 // generating full name
-adminSchema.virtual('fullName').get(function () {
+superAdminSchema.virtual('fullName').get(function () {
   return (
     this?.name?.firstName +
-    '' +
+    ' ' +
     this?.name?.middleName +
-    '' +
+    ' ' +
     this?.name?.lastName
   );
 });
 
 // filter out deleted documents
-adminSchema.pre('find', function (next) {
+superAdminSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
-adminSchema.pre('findOne', function (next) {
+superAdminSchema.pre('findOne', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
-adminSchema.pre('aggregate', function (next) {
+superAdminSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });
 
 //checking if user is already exist!
-adminSchema.statics.isUserExists = async function (id: string) {
-  const existingUser = await Admin.findOne({ id });
+superAdminSchema.statics.isUserExists = async function (id: string) {
+  const existingUser = await SuperAdmin.findOne({ id });
   return existingUser;
 };
 
-export const Admin = model<TAdmin, AdminModel>('Admin', adminSchema);
+export const SuperAdmin = model<TSuperAdmin, SuperAdminModel>(
+  'SuperAdmin',
+  superAdminSchema,
+);

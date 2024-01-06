@@ -13,6 +13,7 @@ import { semesterRegistrationRoutes } from '../modules/semesterRegistration/seme
 import { StudentRoutes } from '../modules/student/student.route';
 import { UserRoutes } from '../modules/user/user.route';
 import { HomeRoutes } from '../modules/Home/home.route';
+import { SuperAdminRoutes } from '../modules/SuparAdmin/superAdmin.route';
 
 const router = Router();
 
@@ -36,6 +37,10 @@ const moduleRoutes = [
   {
     path: '/admins',
     route: AdminRoutes,
+  },
+  {
+    path: '/super-admins',
+    route: SuperAdminRoutes,
   },
   {
     path: '/academic-semesters',
