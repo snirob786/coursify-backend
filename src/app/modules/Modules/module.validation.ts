@@ -1,29 +1,31 @@
 import { z } from 'zod';
-import { ModuleStatus } from './module.constant';
+import { ModuleRegistrationStatus } from './module.constant';
 
-const createBatchValidationSchema = z.object({
+const createModuleValidationSchema = z.object({
   body: z.object({
     title: z.string(),
     course: z.string(),
-    status: z.enum([...(ModuleStatus as [string, ...string[]])]),
+    status: z.enum([...(ModuleRegistrationStatus as [string, ...string[]])]),
     startDate: z.string().datetime(),
     endDate: z.string().datetime(),
     mentor: z.string(),
   }),
 });
 
-const upadateBatchSchema = z.object({
+const upadateModuleSchema = z.object({
   body: z.object({
     title: z.string().optional(),
     course: z.string().optional(),
-    status: z.enum([...(ModuleStatus as [string, ...string[]])]).optional(),
+    status: z
+      .enum([...(ModuleRegistrationStatus as [string, ...string[]])])
+      .optional(),
     startDate: z.string().datetime().optional(),
     endDate: z.string().datetime().optional(),
     mentor: z.string().optional(),
   }),
 });
 
-export const BatchValidations = {
-  createBatchValidationSchema,
-  upadateBatchSchema,
+export const ModuleValidations = {
+  createModuleValidationSchema,
+  upadateModuleSchema,
 };

@@ -2,71 +2,71 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import { BatchService } from './module.service';
+import { ModuleService } from './module.service';
 
-const createBatch = catchAsync(async (req: Request, res: Response) => {
-  const result = await BatchService.createBatchIntoDB(req.body);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Batch is created successfully!',
-    data: result,
-  });
-});
-
-const getAllBatches = catchAsync(async (req: Request, res: Response) => {
-  const result = await BatchService.getAllBatchesFromDB(req.query);
+const createModule = catchAsync(async (req: Request, res: Response) => {
+  const result = await ModuleService.createModuleIntoDB(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Batch is retrieved successfully !',
+    message: 'Module is created successfully!',
     data: result,
   });
 });
 
-const getSingleBatch = catchAsync(async (req: Request, res: Response) => {
+const getAllModules = catchAsync(async (req: Request, res: Response) => {
+  const result = await ModuleService.getAllModulesFromDB(req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Module is retrieved successfully !',
+    data: result,
+  });
+});
+
+const getSingleModule = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const result = await BatchService.getSingleBatchFromDB(id);
+  const result = await ModuleService.getSingleModuleFromDB(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Batch is retrieved successfully',
+    message: 'Module is retrieved successfully',
     data: result,
   });
 });
 
-const updateBatch = catchAsync(async (req: Request, res: Response) => {
+const updateModule = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await BatchService.updateBatchIntoDB(id, req.body);
+  const result = await ModuleService.updateModuleIntoDB(id, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Batch is updated successfully',
+    message: 'Module is updated successfully',
     data: result,
   });
 });
 
-const deleteBatch = catchAsync(async (req: Request, res: Response) => {
+const deleteModule = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await BatchService.deleteBatchFromDB(id);
+  const result = await ModuleService.deleteModuleFromDB(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Batch is updated successfully',
+    message: 'Module is updated successfully',
     data: result,
   });
 });
 
-export const BatchController = {
-  createBatch,
-  getAllBatches,
-  getSingleBatch,
-  updateBatch,
-  deleteBatch,
+export const ModuleController = {
+  createModule,
+  getAllModules,
+  getSingleModule,
+  updateModule,
+  deleteModule,
 };

@@ -1,6 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
 import { BatchRegistrationStatus } from './batch.constant';
 import { TBatch } from './batch.interface';
+import { Course } from '../Course/course.model';
+import AppError from '../../errors/AppError';
+import httpStatus from 'http-status';
+import { Mentor } from '../Mentor/mentor.model';
 
 const batchSchema = new mongoose.Schema<TBatch>(
   {
@@ -45,5 +49,28 @@ const batchSchema = new mongoose.Schema<TBatch>(
     timestamps: true,
   },
 );
+
+batchSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const batch = this; // doc
+  // hashing password and save into DB
+
+  const course = await Course.findById(batch.course);
+  if (!course) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      `This course with id ${batch.course} is not found!`,
+    );
+  }
+  const mentor = await Mentor.findById(batch.mentor);
+  if (!mentor) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      `This mentor with id ${batch.mentor} is not found!`,
+    );
+  }
+
+  next();
+});
 
 export const Batch = mongoose.model<TBatch>('Batch', batchSchema);

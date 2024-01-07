@@ -3,10 +3,10 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { TBatchStudent } from './batchStudent.interface';
-import { BatchStudent } from './batchStudent.model';
+import { TClass } from './class.interface';
+import { Class } from './class.model';
 
-const createBatchStudentIntoDB = async (payload: TBatchStudent) => {
+const createClassIntoDB = async (payload: TClass) => {
   /**
    * Step1: Check if there any registered semester that is already 'UPCOMING'|'ONGOING'
    * Step2: Check if the semester is exist
@@ -14,14 +14,13 @@ const createBatchStudentIntoDB = async (payload: TBatchStudent) => {
    * Step4: Create the semester registration
    */
 
-  //check if there any registered semester that is already 'UPCOMING'|'ONGOING'
-  const result = await BatchStudent.create(payload);
+  const result = await Class.create(payload);
   return result;
 };
 
-const getAllBatcheStudentsFromDB = async (query: Record<string, unknown>) => {
-  const batchQuery = new QueryBuilder(
-    BatchStudent.find().populate('Batch').populate('Student'),
+const getAllClassesFromDB = async (query: Record<string, unknown>) => {
+  const classQuery = new QueryBuilder(
+    Class.find().populate('module').populate('createdBy'),
     query,
   )
     .filter()
@@ -29,22 +28,17 @@ const getAllBatcheStudentsFromDB = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
-  const result = await batchQuery.modelQuery;
+  const result = await classQuery.modelQuery;
   return result;
 };
 
-const getSingleBatchStudentFromDB = async (id: string) => {
-  const result = await BatchStudent.findById(id)
-    .populate('Batch')
-    .populate('Student');
+const getSingleClassFromDB = async (id: string) => {
+  const result = await Class.findById(id);
 
   return result;
 };
 
-const updateBatchStudentIntoDB = async (
-  id: string,
-  payload: Partial<TBatchStudent>,
-) => {
+const updateClassIntoDB = async (id: string, payload: Partial<TClass>) => {
   /**
    * Step1: Check if the semester is exist
    * Step2: Check if the requested registered semester is exists
@@ -59,7 +53,13 @@ const updateBatchStudentIntoDB = async (
 
   // check if the requested registered semester is exists
   // check if the semester is already registered!
-  const result = await BatchStudent.findByIdAndUpdate(id, payload, {
+  const isClassExists = await Class.findById(id);
+
+  if (!isClassExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This class is not found !');
+  }
+
+  const result = await Class.findByIdAndUpdate(id, payload, {
     new: true,
     runValidators: true,
   });
@@ -67,7 +67,7 @@ const updateBatchStudentIntoDB = async (
   return result;
 };
 
-const deleteBatchStudentFromDB = async (id: string) => {
+const deleteClassFromDB = async (id: string) => {
   /** 
   * Step1: Delete associated offered courses.
   * Step2: Delete semester registraton when the status is 
@@ -75,6 +75,11 @@ const deleteBatchStudentFromDB = async (id: string) => {
   **/
 
   // checking if the semester registration is exist
+  const isClassExists = await Class.findById(id);
+
+  if (!isClassExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This batch is not found !');
+  }
 
   const session = await mongoose.startSession();
 
@@ -82,7 +87,7 @@ const deleteBatchStudentFromDB = async (id: string) => {
 
   try {
     session.startTransaction();
-    const deletedBatch = await BatchStudent.findByIdAndDelete(id, {
+    const deletedBatch = await Class.findByIdAndDelete(id, {
       session,
       new: true,
     });
@@ -105,10 +110,10 @@ const deleteBatchStudentFromDB = async (id: string) => {
   }
 };
 
-export const BatchStudentService = {
-  createBatchStudentIntoDB,
-  getAllBatcheStudentsFromDB,
-  getSingleBatchStudentFromDB,
-  updateBatchStudentIntoDB,
-  deleteBatchStudentFromDB,
+export const ClassService = {
+  createClassIntoDB,
+  getAllClassesFromDB,
+  getSingleClassFromDB,
+  updateClassIntoDB,
+  deleteClassFromDB,
 };

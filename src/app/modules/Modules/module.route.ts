@@ -1,28 +1,32 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
-import { BatchController } from './module.controller';
-import { BatchValidations } from './module.validation';
+import { ModuleController } from './module.controller';
+import { ModuleValidations } from './module.validation';
 import auth from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.get('/', BatchController.getAllBatches);
-router.get('/:id', BatchController.getSingleBatch);
+router.get('/', ModuleController.getAllModules);
+router.get('/:id', ModuleController.getSingleModule);
 
 router.post(
   '/create-batch',
   auth('admin', 'superAdmin'),
-  validateRequest(BatchValidations.createBatchValidationSchema),
-  BatchController.createBatch,
+  validateRequest(ModuleValidations.createModuleValidationSchema),
+  ModuleController.createModule,
 );
 
 router.patch(
   '/:id',
   auth('admin', 'superAdmin'),
-  validateRequest(BatchValidations.upadateBatchSchema),
-  BatchController.updateBatch,
+  validateRequest(ModuleValidations.upadateModuleSchema),
+  ModuleController.updateModule,
 );
 
-router.delete('/:id', auth('admin', 'superAdmin'), BatchController.deleteBatch);
+router.delete(
+  '/:id',
+  auth('admin', 'superAdmin'),
+  ModuleController.deleteModule,
+);
 
-export const batchRoutes = router;
+export const ModulesRoutes = router;

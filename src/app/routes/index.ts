@@ -8,6 +8,7 @@ import { StudentRoutes } from '../modules/student/student.route';
 import { UserRoutes } from '../modules/user/user.route';
 import { HomeRoutes } from '../modules/Home/home.route';
 import { SuperAdminRoutes } from '../modules/SuparAdmin/superAdmin.route';
+import { ModulesRoutes } from '../modules/Modules/module.route';
 
 const router = Router();
 
@@ -47,6 +48,10 @@ const moduleRoutes = [
   {
     path: '/auth',
     route: AuthRoutes,
+  },
+  {
+    path: '/modules',
+    route: ModulesRoutes,
   },
 ];
 

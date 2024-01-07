@@ -5,33 +5,27 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
 import { TModule } from './module.interface';
 import { Module } from './module.model';
-import { ModuleStatus } from './module.constant';
 
-const createBatchIntoDB = async (payload: TModule) => {
+const createModuleIntoDB = async (payload: TModule) => {
   /**
    * Step1: Check if there any registered semester that is already 'UPCOMING'|'ONGOING'
    * Step2: Check if the semester is exist
    * Step3: Check if the semester is already registered!
    * Step4: Create the semester registration
    */
-
-  //check if there any registered semester that is already 'UPCOMING'|'ONGOING'
-  const isThereAnyUpcomingOrOngoingBatch = await Module.findOne({
-    $or: [{ status: ModuleStatus.UPCOMING }, { status: ModuleStatus.ONGOING }],
-  });
-
-  if (isThereAnyUpcomingOrOngoingBatch) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      `There is aready an batch named ${isThereAnyUpcomingOrOngoingBatch.status} registered!`,
-    );
-  }
   const result = await Module.create(payload);
   return result;
 };
 
-const getAllBatchesFromDB = async (query: Record<string, unknown>) => {
-  const batchQuery = new QueryBuilder(Module.find().populate('course'), query)
+const getAllModulesFromDB = async (query: Record<string, unknown>) => {
+  const batchQuery = new QueryBuilder(
+    Module.find()
+      .populate('mentor')
+      .populate('class')
+      .populate('assignment')
+      .populate('createdBy'),
+    query,
+  )
     .filter()
     .sort()
     .paginate()
@@ -41,13 +35,13 @@ const getAllBatchesFromDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
-const getSingleBatchFromDB = async (id: string) => {
+const getSingleModuleFromDB = async (id: string) => {
   const result = await Module.findById(id);
 
   return result;
 };
 
-const updateBatchIntoDB = async (id: string, payload: Partial<TModule>) => {
+const updateModuleIntoDB = async (id: string, payload: Partial<TModule>) => {
   /**
    * Step1: Check if the semester is exist
    * Step2: Check if the requested registered semester is exists
@@ -60,46 +54,6 @@ const updateBatchIntoDB = async (id: string, payload: Partial<TModule>) => {
    *
    */
 
-  // check if the requested registered semester is exists
-  // check if the semester is already registered!
-  const isBatchExists = await Module.findById(id);
-
-  if (!isBatchExists) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This semester is not found !');
-  }
-
-  //if the requested semester registration is ended , we will not update anything
-  const currentSemesterStatus = isBatchExists?.status;
-  const requestedStatus = payload?.status;
-
-  if (currentSemesterStatus === ModuleStatus.ENDED) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      `This semester is already ${currentSemesterStatus}`,
-    );
-  }
-
-  // UPCOMING --> ONGOING --> ENDED
-  if (
-    currentSemesterStatus === ModuleStatus.UPCOMING &&
-    requestedStatus === ModuleStatus.ENDED
-  ) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      `You can not directly change status from ${currentSemesterStatus} to ${requestedStatus}`,
-    );
-  }
-
-  if (
-    currentSemesterStatus === ModuleStatus.ONGOING &&
-    requestedStatus === ModuleStatus.UPCOMING
-  ) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      `You can not directly change status from ${currentSemesterStatus} to ${requestedStatus}`,
-    );
-  }
-
   const result = await Module.findByIdAndUpdate(id, payload, {
     new: true,
     runValidators: true,
@@ -108,29 +62,12 @@ const updateBatchIntoDB = async (id: string, payload: Partial<TModule>) => {
   return result;
 };
 
-const deleteBatchFromDB = async (id: string) => {
+const deleteModuleFromDB = async (id: string) => {
   /** 
   * Step1: Delete associated offered courses.
   * Step2: Delete semester registraton when the status is 
   'UPCOMING'.
   **/
-
-  // checking if the semester registration is exist
-  const isBatchExists = await Module.findById(id);
-
-  if (!isBatchExists) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This batch is not found !');
-  }
-
-  // checking if the status is still "UPCOMING"
-  const moduleStatus = isBatchExists.status;
-
-  if (moduleStatus !== 'UPCOMING') {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      `You can not update as the batch is ${moduleStatus}`,
-    );
-  }
 
   const session = await mongoose.startSession();
 
@@ -161,10 +98,10 @@ const deleteBatchFromDB = async (id: string) => {
   }
 };
 
-export const BatchService = {
-  createBatchIntoDB,
-  getAllBatchesFromDB,
-  getSingleBatchFromDB,
-  updateBatchIntoDB,
-  deleteBatchFromDB,
+export const ModuleService = {
+  createModuleIntoDB,
+  getAllModulesFromDB,
+  getSingleModuleFromDB,
+  updateModuleIntoDB,
+  deleteModuleFromDB,
 };
