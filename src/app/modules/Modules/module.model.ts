@@ -1,8 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
-import { BatchRegistrationStatus } from './batch.constant';
-import { TBatch } from './batch.interface';
+import { TModule } from './module.interface';
+import { ModuleStatus } from './module.constant';
 
-const batchSchema = new mongoose.Schema<TBatch>(
+const moduleSchema = new mongoose.Schema<TModule>(
   {
     title: {
       type: String,
@@ -15,7 +15,7 @@ const batchSchema = new mongoose.Schema<TBatch>(
     },
     status: {
       type: String,
-      enum: BatchRegistrationStatus,
+      enum: ModuleStatus,
       default: 'UPCOMING',
     },
     startDate: {
@@ -28,14 +28,9 @@ const batchSchema = new mongoose.Schema<TBatch>(
     },
     mentor: {
       type: Schema.Types.ObjectId,
+      required: [true, 'Mentor id is required'],
       ref: 'Mentor',
     },
-    modules: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Module',
-      },
-    ],
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -46,4 +41,4 @@ const batchSchema = new mongoose.Schema<TBatch>(
   },
 );
 
-export const Batch = mongoose.model<TBatch>('Batch', batchSchema);
+export const Module = mongoose.model<TModule>('Module', moduleSchema);

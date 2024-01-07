@@ -71,11 +71,6 @@ const mentorSchema = new Schema<TMentor, MentorModel>(
       required: [true, 'Permanent address is required'],
     },
     profileImg: { type: String },
-    academicDepartment: {
-      type: Schema.Types.ObjectId,
-      required: [true, 'User id is required'],
-      ref: 'User',
-    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -84,6 +79,10 @@ const mentorSchema = new Schema<TMentor, MentorModel>(
       type: String,
       enum: UserStatus,
       default: 'in-progress',
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   {

@@ -39,6 +39,15 @@ const courseSchema = new Schema<TCourse>({
     type: Boolean,
     default: false,
   },
+  mentor: {
+    type: Schema.Types.ObjectId,
+    ref: 'Mentor',
+  },
+  duration: String,
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 export const Course = model<TCourse>('Course', courseSchema);

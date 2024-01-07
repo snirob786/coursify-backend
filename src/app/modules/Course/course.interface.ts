@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { TBatch } from '../batch/batch.interface';
+import { TBatch } from '../Batch/batch.interface';
 
 export type TPreRequisiteCourses = {
   course: Types.ObjectId;
@@ -11,6 +11,9 @@ export type TCourse = {
   batches: Array<TBatch>;
   isDeleted?: boolean;
   preRequisiteCourses: [TPreRequisiteCourses];
+  mentor: Types.ObjectId;
+  duration: string;
+  createdBy: Types.ObjectId;
 };
 
 export type TCourseMentor = {

@@ -31,9 +31,9 @@ export type TMentor = {
   presentAddress: string;
   permanentAddress: string;
   profileImg?: string;
-  academicDepartment: Types.ObjectId;
   isDeleted: boolean;
   status: 'in-progress' | 'blocked' | 'active';
+  createdBy: Types.ObjectId;
 };
 
 export interface MentorModel extends Model<TMentor> {

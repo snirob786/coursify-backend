@@ -7,20 +7,20 @@ import { updateMentorValidationSchema } from './mentor.validation';
 
 const router = express.Router();
 
-router.get('/:id', MentorControllers.getSingleFaculty);
+router.get('/:id', MentorControllers.getSingleMentor);
 
 router.patch(
   '/:id',
   validateRequest(updateMentorValidationSchema),
-  MentorControllers.updateFaculty,
+  MentorControllers.updateMentor,
 );
 
-router.delete('/:id', MentorControllers.deleteFaculty);
+router.delete('/:id', MentorControllers.deleteMentor);
 
 router.get(
   '/',
   auth(USER_ROLE.admin, USER_ROLE.mentor),
-  MentorControllers.getAllFaculties,
+  MentorControllers.getAllMentors,
 );
 
 export const MentorRoutes = router;

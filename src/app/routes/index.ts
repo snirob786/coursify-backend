@@ -3,7 +3,7 @@ import { AdminRoutes } from '../modules/Admin/admin.route';
 import { AuthRoutes } from '../modules/Auth/auth.route';
 import { CourseRoutes } from '../modules/Course/course.route';
 import { MentorRoutes } from '../modules/Mentor/mentor.route';
-import { batchRoutes } from '../modules/batch/batch.route';
+import { batchRoutes } from '../modules/Batch/batch.route';
 import { StudentRoutes } from '../modules/student/student.route';
 import { UserRoutes } from '../modules/user/user.route';
 import { HomeRoutes } from '../modules/Home/home.route';
