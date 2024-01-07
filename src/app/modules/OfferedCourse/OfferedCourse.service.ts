@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
 import { Course } from '../Course/course.model';
-import { Faculty } from '../Faculty/faculty.model';
+import { Faculty } from '../Mentor/mentor.model';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { AcademicFaculty } from '../academicFaculty/academicFaculty.model';
 import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
@@ -179,7 +179,6 @@ const updateOfferedCourseIntoDB = async (
 
   const semesterRegistration = isOfferedCourseExists.semesterRegistration;
   // get the schedules of the faculties
-
 
   // Checking the status of the semester registration
   const semesterRegistrationStatus =

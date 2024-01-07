@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { BloodGroup, Gender } from './faculty.constant';
-import { FacultyModel, TFaculty, TUserName } from './faculty.interface';
+import { BloodGroup, Gender } from './mentor.constant';
+import { MentorModel, TMentor, TUserName } from './mentor.interface';
 import { UserStatus } from '../user/user.constant';
 
 const userNameSchema = new Schema<TUserName>({
@@ -22,7 +22,7 @@ const userNameSchema = new Schema<TUserName>({
   },
 });
 
-const facultySchema = new Schema<TFaculty, FacultyModel>(
+const mentorSchema = new Schema<TMentor, MentorModel>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -96,7 +96,7 @@ const facultySchema = new Schema<TFaculty, FacultyModel>(
 );
 
 // generating full name
-facultySchema.virtual('fullName').get(function () {
+mentorSchema.virtual('fullName').get(function () {
   return (
     this?.name?.firstName +
     '' +
@@ -107,25 +107,25 @@ facultySchema.virtual('fullName').get(function () {
 });
 
 // filter out deleted documents
-facultySchema.pre('find', function (next) {
+mentorSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
-facultySchema.pre('findOne', function (next) {
+mentorSchema.pre('findOne', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
-facultySchema.pre('aggregate', function (next) {
+mentorSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });
 
 //checking if user is already exist!
-facultySchema.statics.isUserExists = async function (id: string) {
-  const existingUser = await Faculty.findOne({ id });
+mentorSchema.statics.isUserExists = async function (id: string) {
+  const existingUser = await Mentor.findOne({ id });
   return existingUser;
 };
 
-export const Faculty = model<TFaculty, FacultyModel>('Faculty', facultySchema);
+export const Mentor = model<TMentor, MentorModel>('Mentor', mentorSchema);

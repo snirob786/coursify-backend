@@ -7,8 +7,8 @@ import AppError from '../../errors/AppError';
 // import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 import { TAdmin } from '../Admin/admin.interface';
 import { Admin } from '../Admin/admin.model';
-import { TFaculty } from '../Faculty/faculty.interface';
-import { Faculty } from '../Faculty/faculty.model';
+import { TMentor } from '../Mentor/mentor.interface';
+import { Mentor } from '../Mentor/mentor.model';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
@@ -94,7 +94,7 @@ const createStudentIntoDB = async (
 const createFacultyIntoDB = async (
   file: any,
   password: string,
-  payload: TFaculty,
+  payload: TMentor,
 ) => {
   // create a user object
   const userData: Partial<TUser> = {};
@@ -141,7 +141,7 @@ const createFacultyIntoDB = async (
     // payload.profileImg = secure_url;
     // create a faculty (transaction-2)
 
-    const newFaculty = await Faculty.create([payload], { session });
+    const newFaculty = await Mentor.create([payload], { session });
 
     if (!newFaculty.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create faculty');
@@ -284,8 +284,12 @@ const getMe = async (userId: string, role: string) => {
     result = await Admin.findOne({ id: userId }).populate('user');
   }
 
+  if (role === 'superAdmin') {
+    result = await SuperAdmin.findOne({ id: userId }).populate('user');
+  }
+
   if (role === 'faculty') {
-    result = await Faculty.findOne({ id: userId }).populate('user');
+    result = await Mentor.findOne({ id: userId }).populate('user');
   }
 
   return result;

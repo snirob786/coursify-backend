@@ -4,7 +4,7 @@ import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { upload } from '../../utils/sendImageToCloudinary';
 import { createAdminValidationSchema } from '../Admin/admin.validation';
-import { createFacultyValidationSchema } from '../Faculty/faculty.validation';
+import { createMentorValidationSchema } from '../Mentor/mentor.validation';
 import { createStudentValidationSchema } from '../student/student.validation';
 import { USER_ROLE } from './user.constant';
 import { UserControllers } from './user.controller';
@@ -25,13 +25,13 @@ router.post(
 );
 
 router.post(
-  '/create-faculty',
+  '/create-mentor',
   // upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     // req.body = JSON.parse(req.body.data);
     next();
   },
-  validateRequest(createFacultyValidationSchema),
+  validateRequest(createMentorValidationSchema),
   UserControllers.createFaculty,
 );
 

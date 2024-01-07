@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import AppError from '../../errors/AppError';
 import { Course } from '../Course/course.model';
-import { Faculty } from '../Faculty/faculty.model';
+import { Faculty } from '../Mentor/mentor.model';
 import { OfferedCourse } from '../OfferedCourse/OfferedCourse.model';
 import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
 import { Student } from '../student/student.model';

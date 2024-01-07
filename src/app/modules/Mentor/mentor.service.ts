@@ -4,36 +4,36 @@ import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
-import { FacultySearchableFields } from './faculty.constant';
-import { TFaculty } from './faculty.interface';
-import { Faculty } from './faculty.model';
+import { MentorSearchableFields } from './mentor.constant';
+import { TMentor } from './mentor.interface';
+import { Mentor } from './mentor.model';
 
-const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
-  const facultyQuery = new QueryBuilder(
-    Faculty.find().populate('academicDepartment'),
+const getAllMentorsFromDB = async (query: Record<string, unknown>) => {
+  const mentorQuery = new QueryBuilder(
+    Mentor.find().populate('academicDepartment'),
     query,
   )
-    .search(FacultySearchableFields)
+    .search(MentorSearchableFields)
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const result = await facultyQuery.modelQuery;
+  const result = await mentorQuery.modelQuery;
   return result;
 };
 
-const getSingleFacultyFromDB = async (id: string) => {
-  const result = await Faculty.findById(id).populate('academicDepartment');
+const getSingleMentorFromDB = async (id: string) => {
+  const result = await Mentor.findById(id).populate('academicDepartment');
 
   return result;
 };
 
-const updateFacultyIntoDB = async (id: string, payload: Partial<TFaculty>) => {
-  const { name, ...remainingFacultyData } = payload;
+const updateMentorIntoDB = async (id: string, payload: Partial<TMentor>) => {
+  const { name, ...remainingMentorData } = payload;
 
   const modifiedUpdatedData: Record<string, unknown> = {
-    ...remainingFacultyData,
+    ...remainingMentorData,
   };
 
   if (name && Object.keys(name).length) {
@@ -42,27 +42,27 @@ const updateFacultyIntoDB = async (id: string, payload: Partial<TFaculty>) => {
     }
   }
 
-  const result = await Faculty.findByIdAndUpdate(id, modifiedUpdatedData, {
+  const result = await Mentor.findByIdAndUpdate(id, modifiedUpdatedData, {
     new: true,
     runValidators: true,
   });
   return result;
 };
 
-const deleteFacultyFromDB = async (id: string) => {
+const deleteMentorFromDB = async (id: string) => {
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
-    const deletedFaculty = await Faculty.findByIdAndUpdate(
+    const deletedFaculty = await Mentor.findByIdAndUpdate(
       id,
       { isDeleted: true },
       { new: true, session },
     );
 
     if (!deletedFaculty) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete faculty');
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete mentor');
     }
 
     // get user _id from deletedFaculty
@@ -89,9 +89,9 @@ const deleteFacultyFromDB = async (id: string) => {
   }
 };
 
-export const FacultyServices = {
-  getAllFacultiesFromDB,
-  getSingleFacultyFromDB,
-  updateFacultyIntoDB,
-  deleteFacultyFromDB,
+export const MentorServices = {
+  getAllMentorsFromDB,
+  getSingleMentorFromDB,
+  updateMentorIntoDB,
+  deleteMentorFromDB,
 };

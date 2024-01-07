@@ -18,7 +18,7 @@ export type TUserName = {
   lastName: string;
 };
 
-export type TFaculty = {
+export type TMentor = {
   user: Types.ObjectId;
   designation: string;
   name: TUserName;
@@ -36,6 +36,6 @@ export type TFaculty = {
   status: 'in-progress' | 'blocked' | 'active';
 };
 
-export interface FacultyModel extends Model<TFaculty> {
-  isUserExists(id: string): Promise<TFaculty | null>;
+export interface MentorModel extends Model<TMentor> {
+  isUserExists(id: string): Promise<TMentor | null>;
 }

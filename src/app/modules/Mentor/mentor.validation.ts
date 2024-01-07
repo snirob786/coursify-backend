@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BloodGroup, Gender } from './faculty.constant';
+import { BloodGroup, Gender } from './mentor.constant';
 
 const createUserNameValidationSchema = z.object({
   firstName: z
@@ -13,7 +13,7 @@ const createUserNameValidationSchema = z.object({
   lastName: z.string(),
 });
 
-export const createFacultyValidationSchema = z.object({
+export const createMentorValidationSchema = z.object({
   body: z.object({
     password: z.string().max(20),
     faculty: z.object({
@@ -39,9 +39,9 @@ const updateUserNameValidationSchema = z.object({
   lastName: z.string().optional(),
 });
 
-export const updateFacultyValidationSchema = z.object({
+export const updateMentorValidationSchema = z.object({
   body: z.object({
-    faculty: z.object({
+    mentor: z.object({
       designation: z.string().optional(),
       name: updateUserNameValidationSchema,
       gender: z.enum([...Gender] as [string, ...string[]]).optional(),
@@ -58,7 +58,7 @@ export const updateFacultyValidationSchema = z.object({
   }),
 });
 
-export const studentValidations = {
-  createFacultyValidationSchema,
-  updateFacultyValidationSchema,
+export const mentorValidations = {
+  createMentorValidationSchema,
+  updateMentorValidationSchema,
 };

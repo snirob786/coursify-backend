@@ -4,7 +4,7 @@ import { AuthRoutes } from '../modules/Auth/auth.route';
 import { CourseRoutes } from '../modules/Course/course.route';
 
 import { EnrolledCourseRoutes } from '../modules/EnrolledCourse/enrolledCourse.route';
-import { FacultyRoutes } from '../modules/Faculty/faculty.route';
+import { MentorRoutes } from '../modules/Mentor/mentor.route';
 import { offeredCourseRoutes } from '../modules/OfferedCourse/OfferedCourse.route';
 import { AcademicDepartmentRoutes } from '../modules/academicDepartment/academicDepartment.route';
 import { AcademicFacultyRoutes } from '../modules/academicFaculty/academicFaculty.route';
@@ -31,8 +31,8 @@ const moduleRoutes = [
     route: StudentRoutes,
   },
   {
-    path: '/faculties',
-    route: FacultyRoutes,
+    path: '/mentors',
+    route: MentorRoutes,
   },
   {
     path: '/admins',
