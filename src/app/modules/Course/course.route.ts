@@ -8,35 +8,41 @@ const router = express.Router();
 
 router.post(
   '/create-course',
-  auth('admin'),
+  auth('admin', 'superAdmin'),
   validateRequest(CourseValidations.createCourseValidationSchema),
   CourseControllers.createCourse,
 );
 
 router.get(
   '/:id',
-  auth('student', 'faculty', 'admin'),
+  // auth('student', 'mentor', 'admin', 'superAdmin'),
   CourseControllers.getSingleCourse,
 );
 
 router.patch(
   '/:id',
-  auth('admin'),
+  auth('admin', 'superAdmin'),
   validateRequest(CourseValidations.updateCourseValidationSchema),
   CourseControllers.updateCourse,
 );
 
-router.delete('/:id', auth('admin'), CourseControllers.deleteCourse);
+router.delete(
+  '/:id',
+  auth('admin', 'superAdmin'),
+  CourseControllers.deleteCourse,
+);
 
 router.put(
-  '/:courseId/assign-faculties',
-  validateRequest(CourseValidations.facultiesWithCourseValidationSchema),
+  '/:courseId/assign-mentors',
+  auth('admin', 'superAdmin'),
+  validateRequest(CourseValidations.mentorsWithCourseValidationSchema),
   CourseControllers.assignFacultiesWithCourse,
 );
 
 router.delete(
-  '/:courseId/remove-faculties',
-  validateRequest(CourseValidations.facultiesWithCourseValidationSchema),
+  '/:courseId/remove-mentors',
+  auth('admin', 'superAdmin'),
+  validateRequest(CourseValidations.mentorsWithCourseValidationSchema),
   CourseControllers.removeFacultiesFromCourse,
 );
 

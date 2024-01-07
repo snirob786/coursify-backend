@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { TBatch } from '../batch/batch.interface';
 
 export type TPreRequisiteCourses = {
   course: Types.ObjectId;
@@ -7,14 +8,12 @@ export type TPreRequisiteCourses = {
 
 export type TCourse = {
   title: string;
-  prefix: string;
-  code: number;
-  credits: number;
+  batches: Array<TBatch>;
   isDeleted?: boolean;
   preRequisiteCourses: [TPreRequisiteCourses];
 };
 
-export type TCoursefaculty = {
+export type TCourseMentor = {
   course: Types.ObjectId;
-  faculties: [Types.ObjectId];
+  mentors: [Types.ObjectId];
 };

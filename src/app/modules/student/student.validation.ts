@@ -4,12 +4,11 @@ const createUserNameValidationSchema = z.object({
   firstName: z
     .string()
     .min(1)
-    .max(20)
     .refine((value) => /^[A-Z]/.test(value), {
       message: 'First Name must start with a capital letter',
     }),
-  middleName: z.string(),
-  lastName: z.string(),
+  middleName: z.string().optional(),
+  lastName: z.string().min(3),
 });
 
 const createGuardianValidationSchema = z.object({
@@ -51,9 +50,9 @@ export const createStudentValidationSchema = z.object({
 });
 
 const updateUserNameValidationSchema = z.object({
-  firstName: z.string().min(1).max(20).optional(),
-  middleName: z.string().optional(),
-  lastName: z.string().optional(),
+  firstName: z.string().min(1),
+  middleName: z.string(),
+  lastName: z.string().min(1),
 });
 
 const updateGuardianValidationSchema = z.object({

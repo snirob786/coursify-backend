@@ -2,7 +2,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
-import { upload } from '../../utils/sendImageToCloudinary';
+// import { upload } from '../../utils/sendImageToCloudinary';
 import { createAdminValidationSchema } from '../Admin/admin.validation';
 import { createMentorValidationSchema } from '../Mentor/mentor.validation';
 import { createStudentValidationSchema } from '../student/student.validation';
@@ -38,9 +38,9 @@ router.post(
 router.post(
   '/create-admin',
   auth(USER_ROLE.superAdmin),
-  upload.single('file'),
+  // upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
-    req.body = JSON.parse(req.body.data);
+    // req.body = JSON.parse(req.body.data);
     next();
   },
   validateRequest(createAdminValidationSchema),
@@ -59,11 +59,15 @@ router.post(
 
 router.post(
   '/change-status/:id',
-  auth('admin'),
+  auth('admin', 'superAdmin'),
   validateRequest(UserValidation.changeStatusValidationSchema),
   UserControllers.changeStatus,
 );
 
-router.get('/me', auth('student', 'faculty', 'admin'), UserControllers.getMe);
+router.get(
+  '/me',
+  auth('student', 'mentor', 'admin', 'superAdmin'),
+  UserControllers.getMe,
+);
 
 export const UserRoutes = router;

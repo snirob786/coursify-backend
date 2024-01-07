@@ -9,10 +9,8 @@ import { TAdmin } from '../Admin/admin.interface';
 import { Admin } from '../Admin/admin.model';
 import { TMentor } from '../Mentor/mentor.interface';
 import { Mentor } from '../Mentor/mentor.model';
-import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
-import { AcademicSemester } from './../academicSemester/academicSemester.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
 // import {
@@ -38,15 +36,6 @@ const createStudentIntoDB = async (
   userData.role = 'student';
   // set student email
   userData.email = payload.email;
-
-  // find academic semester info
-  const admissionSemester = await AcademicSemester.findById(
-    payload.admissionSemester,
-  );
-
-  if (!admissionSemester) {
-    throw new AppError(400, 'Admission semester not found');
-  }
 
   const session = await mongoose.startSession();
 
@@ -103,18 +92,9 @@ const createFacultyIntoDB = async (
   userData.password = password || (config.default_password as string);
 
   //set faculty role
-  userData.role = 'faculty';
+  userData.role = 'mentor';
   //set faculty email
   userData.email = payload.email;
-
-  // find academic department info
-  const academicDepartment = await AcademicDepartment.findById(
-    payload.academicDepartment,
-  );
-
-  if (!academicDepartment) {
-    throw new AppError(400, 'Academic department not found');
-  }
 
   const session = await mongoose.startSession();
 
