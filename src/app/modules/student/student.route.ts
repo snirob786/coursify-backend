@@ -8,18 +8,19 @@ const router = express.Router();
 
 router.get('/', StudentControllers.getAllStudents);
 
-router.get(
-  '/:id',
-  auth('admin', 'faculty'),
-  StudentControllers.getSingleStudent,
-);
+router.get('/:id', StudentControllers.getSingleStudent);
 
 router.patch(
   '/:id',
+  auth('admin', 'mentor', 'superAdmin'),
   validateRequest(updateStudentValidationSchema),
   StudentControllers.updateStudent,
 );
 
-router.delete('/:id', StudentControllers.deleteStudent);
+router.delete(
+  '/:id',
+  auth('admin', 'mentor', 'superAdmin'),
+  StudentControllers.deleteStudent,
+);
 
 export const StudentRoutes = router;
