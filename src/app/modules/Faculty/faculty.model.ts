@@ -24,11 +24,6 @@ const userNameSchema = new Schema<TUserName>({
 
 const facultySchema = new Schema<TFaculty, FacultyModel>(
   {
-    id: {
-      type: String,
-      required: [true, 'ID is required'],
-      unique: true,
-    },
     user: {
       type: Schema.Types.ObjectId,
       required: [true, 'User id is required'],
@@ -62,7 +57,7 @@ const facultySchema = new Schema<TFaculty, FacultyModel>(
       type: String,
       required: [true, 'Emergency contact number is required'],
     },
-    bloogGroup: {
+    bloodGroup: {
       type: String,
       enum: {
         values: BloodGroup,

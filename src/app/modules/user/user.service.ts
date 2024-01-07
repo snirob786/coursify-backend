@@ -136,7 +136,7 @@ const createFacultyIntoDB = async (
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
     }
     // set id , _id as user
-    payload.id = newUser[0].id;
+    // payload.id = newUser[0].id;
     payload.user = newUser[0]._id; //reference _id
     // payload.profileImg = secure_url;
     // create a faculty (transaction-2)

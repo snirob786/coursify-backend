@@ -6,11 +6,6 @@ import { UserStatus } from './user.constant';
 import { TUser, UserModel } from './user.interface';
 const userSchema = new Schema<TUser, UserModel>(
   {
-    // id: {
-    //   type: String,
-    //   required: true,
-    //   unique: true,
-    // },
     email: {
       type: String,
       required: true,
@@ -68,6 +63,14 @@ userSchema.post('save', function (doc, next) {
 
 userSchema.statics.isUserExistsByCustomId = async function (id: string) {
   return await User.findOne({ id }).select('+password');
+};
+
+userSchema.statics.isUserExistsByCustomUsername = async function (
+  username: string,
+) {
+  return await User.findOne({
+    $or: [{ username }, { email: username }],
+  }).select('+password');
 };
 
 userSchema.statics.isPasswordMatched = async function (
