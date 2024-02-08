@@ -13,6 +13,11 @@ const moduleSchema = new mongoose.Schema<TModule>(
       required: [true, 'Course id is required'],
       ref: 'Course',
     },
+    batch: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'Batch id is required'],
+      ref: 'Batch',
+    },
     status: {
       type: String,
       enum: ModuleStatus,

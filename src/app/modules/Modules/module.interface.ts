@@ -3,6 +3,7 @@ import { Types } from 'mongoose';
 export type TModule = {
   title: string;
   course: Types.ObjectId;
+  batch: Types.ObjectId;
   status: 'UPCOMING' | 'ONGOING' | 'ENDED';
   moduleType: 'class' | 'assignment';
   startDate: Date;

@@ -5,6 +5,7 @@ const createModuleValidationSchema = z.object({
   body: z.object({
     title: z.string(),
     course: z.string(),
+    batch: z.string(),
     status: z.enum([...(ModuleRegistrationStatus as [string, ...string[]])]),
     startDate: z.string().datetime(),
     endDate: z.string().datetime(),
